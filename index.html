@@ -32,10 +32,14 @@
           return
         }
         colors = colors.join(', ')
-        var bg = 'linear-gradient(to bottom, ' + colors + ')'
+
+        var style = 'background:-webkit-linear-gradient(top, ' + colors + ');'
+        + 'background:-moz-linear-gradient(top, ' + colors + ');'
+        + 'background:linear-gradient(to bottom, ' + colors + ');'
+        console.log(style)
 
         var el = document.querySelector('.main')
-        el.style.background = bg
+        el.setAttribute('style', style)
       }
 
     </script>
