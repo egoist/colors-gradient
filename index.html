@@ -9,6 +9,11 @@
         margin: 0;
         font: 14px/1.4 'Arial Black', Arial, sans-serif;
       }
+      * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
       .main {
         min-height: 100vmin;
         position: absolute;
@@ -17,16 +22,69 @@
         left: 0;
         right: 0;
       }
+      .bar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 300px;
+        line-height: 60px;
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+        background-color: rgba(240, 240, 240, 0.31);
+        opacity: 0;
+        -webkit-transition: opacity .3s ease;
+        -moz-transition: opacity .3s ease;
+        transition: opacity .3s ease;
+      }
+      .bar:hover {
+        opacity: 1;
+      }
+      .bar .hash {
+        background-color: transparent;
+        font-size: 24px;
+        padding: 3px 8px;
+        resize: none;
+        width: 100%;
+      }
+      .bar span {
+        background-color: transparent;
+        padding: 0 8px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 3px;
+        cursor: pointer;
+        display: block;
+      }
+      .bar span:hover {
+        background-color: rgba(249, 249, 249, 0.65);
+      }
+      .bar span.active {
+        background-color: #333;
+        color: white;
+      }
     </style>
   </head>
   <body>
     <div class="main"></div>
+    <div class="bar">
+      
+      <textarea type="text" class="hash" rows="3"></textarea><span class="choose active">Hash</span>
+    </div>
     <script>
+
+      var $ = document.querySelector.bind(document)
+      var $$ = document.querySelectorAll.bind(document)
 
       makeBg()
 
+      $('.choose').addEventListener('click', applyHash, false)
+
       function makeBg (hash) {
         var hash = hash || location.hash.substring(1)
+        location.hash = hash
+
         var colors = []
         var parts = hash.length / 6
         for (var i = 0; i < parts; i++) {
@@ -37,16 +95,29 @@
         if (!colors || colors.length !== parts) {
           return
         }
+        var hexes = colors.join(' ')
+        $('.hash').value = hexes
         colors = colors.join(', ')
 
         var style = 'background:-webkit-linear-gradient(top, ' + colors + ');'
         + 'background:-moz-linear-gradient(top, ' + colors + ');'
         + 'background:linear-gradient(to bottom, ' + colors + ');'
 
-        var el = document.querySelector('.main')
+        var el = $('.main')
         el.setAttribute('style', style)
 
+
+
       }
+
+      function applyHash () {
+        var hash = $('.hash').value.split(' ').map(function (c) {
+          return c.replace('#', '')
+        }).join('')
+
+        makeBg(hash)
+      }
+
 
     </script>
   </body>
